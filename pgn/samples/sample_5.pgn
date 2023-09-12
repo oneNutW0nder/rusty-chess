@@ -1,0 +1,26 @@
+[Event "Cincinnati Open"]
+[Site "?"]
+[Date "2023.04.15"]
+[Round "4"]
+[White "victim"]
+[Black "oneNutW0nder"]
+[Result "0-1"]
+[BlackElo "792"]
+[EventDate "2023.04.15"]
+[ECO "D85"]
+[PlyCount "56"]
+[TimeControl "120/d5"]
+
+1.d4 Nf6 2.c4 g6 3.Nc3 d5 {Another Grunfeld! After I played 3...d5 my opponent thought for ~15 minutes because he was expecting a KID and had no idea what 3...d5 was all about.}  4.cxd5 Nxd5 5.Nxd5 Qxd5 {He chooses to immediately simplify all the way down and continue his development. Black has already equalized.}  6.Nf3 Bg7 7.Bf4 {The line that I have in my opening file goes 7.e3 instead.}  7...c5 {sticking to the thematic Grunfeld pawn break c5! 7.Bf4 didn't do anything so I continued ripping apart White's center to activate my pieces.}  8.Bxb8 {I was very surprised to see this move as I had never seen anything related to this before in these lines.}  8...Rxb8 9.Qa4+ {here I see that he wants my a7 pawn which he can take as I get another piece developed and his Queen is very misplaced.}  9...Bd7 10.Qxa7 O-O 11.e3 cxd4 $17 12.Nxd4 e5 $2 {This was the first move I made that started me down the wrong path. This temporarily kicks White's knight and blocks my Bishop at the same time. Better was something like:}  ( {[%cal Ye4e1] }  12...Qe4 13.Rd1 e5 {Here e5 is much more potent because the Black Queen is poised to give a check on b4 and wreak havoc.}  14.Nb3 Qb4+ 15.Rd2 Rfc8 {trying to trade Queens and remove the pin}  16.Qa3 Bf8 17.Qxb4 Bxb4 {Black maintains the initiative}  )  13.Nf3 Bb5 $2 $10 {Here I was playing "hope chess" with 13...Bb5. During the game I was calculating some lines that involved trapping the White Queen. Instead I should have justified pushing e5 with the immediate e4. This would shove a pawn down White's throat and make him move his Knight again.}  ( {Better was}  13...e4 14.Nd4 Rfd8 {Here Black can play simple moves and bring all the pieces into the game and control the open files.}  )  14.Qa5 {The refutation to my "hope chess" move. Black has gone from -/+ to equal now.}  14...Bc6 15.Qxd5 Bxd5 16.Be2 f5 $2 $10 {I can't remember why I played f5 here but I would assume my thought process revoled around grabbing space and moving mobilizing my pawns. However, I should have prioritzed controlling the open C and D files with my passive Rooks.}  17.b3 e4 18.Nd4 f4 19.O-O {I was surprised to see this move considering my pawn advance down the King side of the board.}  19...f3 $2 {According to the computer this is a bad move but practically speaking I liked this because it made my opponent very uncomfortable. I was also dreaming of a scenario in which I end up with a pawn on f3 as we enter an endgame which could give me mating potential if White's back rank gets weaker.}  20.gxf3 exf3 21.Bc4 Bxc4 22.bxc4 Bxd4 {22...Bxd4 surprised my opponent but I found it very logical as this position was heading toward a draw. I knew his connected pawns d4 and c4 were not that dangerous right now because my Rook could get active way faster than his and I a potential attack on his King which is how the game continued.}  23.exd4 Rf4 24.d5 Rg4+ {This is where I calculated to when I played 22...Bxd4}  25.Kh1 Rf8 $4 {This was a losing move which I realized very soon after playing it if my opponent focussed on rolling his pawns down the board. However, at this point in the game I knew his calculation was slow and not great in complex situations so I went for the win and made things tricky!}  ( 25...Rxc4 26.Rfd1 Rd8 {and the game fizzles out into a draw with correct play.}  )  26.c5 Rf5 {I knew if my opponent pushed his pawns I would have to switch to defense but I thought I could hold albeit very close.}  27.Rad1 $4 {When I saw this move I knew immediately it was losing. White wasted a tempo on defending his pawns instead of defending by pushing them allowing me an extra precious move to mate or win material.}  ( 27.c6 bxc6 28.dxc6 Rc4 29.Rfc1 Rfc5 30.Rxc4 Rxc4 31.a4 Rxc6 32.a5 Ra6 {White will eventually win this endgame due to his A pawn}  )  27...Rh5 {Here I knew 28.Rg1 was forced to stop the mating attack but then White would be down a Rook in a winning endgame for Black.}  28.Rd3 ( 28.Rg1 Rgh4 29.Rg2 fxg2+ 30.Kxg2 )  28...Rg2 {White resigns due to unstoppable mate on h2
+
+--
+
+Lessons Learned:
+
+- Get your pieces active! I had a -3 advantage out of the opening/book and gave it all away within 4 moves do to subtle differences in the squares my pieces were on.
+
+- Control open files and get the Rooks involved faster. When I had given away my advantage and was feeling the pressure of losing the game I should have calmed down and claimed some easy positional advantages like the C and D files.
+
+- When there are connected pawns in the center of the board more time should be taken to calculate if they are going to promote or not before carrying out a plan or attack.}  ( 28...Rg2 29.Rxf3 Rhxh2# )  0-1
+
+
