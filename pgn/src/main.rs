@@ -6,6 +6,8 @@ fn main() -> std::io::Result<()> {
     let mut inp: String = String::new();
     std::io::stdin().read_line(&mut inp).unwrap();
 
+    let inp = inp.trim();
+
     println!(
         "Trying to open file: {inp} from {:?}",
         env::current_dir().unwrap()
