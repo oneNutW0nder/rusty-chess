@@ -1,0 +1,54 @@
+(* This file defines the PGN format using EBNF. *)
+(* I derrived the EBNF from the BNF provided in the PGN specification linked below. *)
+(* PGN specification: http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm#c18 *)
+(* Link for more information about EBNF: https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form *)
+(* ======================================================================== *)
+
+
+PGN = {Game} ;
+Game = {Tag}, "\n", {Move}, [Result], "\n" ;
+Tag = "[", {Character}, '"', {Character},'"', "]" ;
+
+Move = Number, Ply, [Ply] ; 
+Number = digit, ("." | "...") ; (* Need to test variations '(<varation here>{Variation comment} )3...b5 etc'*)
+Ply = (pawnMove | pawnCapture | pieceMove | pieceCapture | castleKing | castleQueen), [moveQuality] ;
+
+Result = "1-0" | "0-1" | "1/2-1/2" | "*" ;
+
+moveQuality = "$", digit ; (* Need to confirm/read/test this more for proper values/placement *)
+pawnMove = Square, [check | checkmate] ; 
+pawnCapture = file, capture, Square ; 
+pieceMove = piece, [file], Square, [check | checkmate] ; (* Need to test cases of Nge7 etc. *)
+pieceCapture = piece, capture, Square ;
+
+Square = file, rank ;
+rank = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" ;
+file = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" ;
+piece = "K" | "Q" | "B" | "N" | "R" ;
+capture = "x" ;
+check = "+" ;
+checkmate = "#" ;
+
+
+Castles = castleKing | castleQueen ;
+castleKing = "O-O", [check | checkmate] ;
+castleQueen = "O-O-O", [check | checkmate] ;
+
+Character = letter | digit | symbol ;
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+       | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+       | "x" | "y" | "z" ;
+
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+symbol = "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">"
+       | "'" | '"' | "=" | "|" | "." | "," | ";" | "-" 
+       | "+" | "*" | "?" | "\n" | "_" | " " | "/" | "!" | ":" ;
+
+
+(* ======================================================================== *)
