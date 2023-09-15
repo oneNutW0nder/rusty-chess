@@ -11,7 +11,7 @@ Tag = "[", {Character}, '"', {Character},'"', "]" ;
 
 Move = Number, Ply, [Ply] ; 
 Number = digit, ("." | "...") ; (* Need to test variations '(<varation here>{Variation comment} )3...b5 etc'*)
-Ply = (pawnMove | pawnCapture | pieceMove | pieceCapture | castleKing | castleQueen), [moveQuality] ;
+Ply = (pawnMove | pawnCapture | pieceMove | pieceCapture | Castles ), [moveQuality] ;
 
 Result = "1-0" | "0-1" | "1/2-1/2" | "*" ;
 
