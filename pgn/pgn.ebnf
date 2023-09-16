@@ -19,6 +19,7 @@ moveSymbol = "$", digit, {digit} ; (* Spec: 'NAG' is starts with a '$' and is fo
 
 pawnMove = Square, [check | checkmate] ; 
 pawnCapture = file, capture, Square, [check | checkmate]; 
+pawnPromotion = file, "=", piece, [check | checkmate];
 pieceMove = piece, [file | rank], Square, [check | checkmate] ; (* Need to test cases of Nge7 etc. *)
 pieceCapture = piece, capture, Square, [check | checkmate];
 
