@@ -17,13 +17,18 @@ Result = "1-0" | "0-1" | "1/2-1/2" | "*" ;
 
 moveSymbol = "$", digit, {digit} ; (* Spec: 'NAG' is starts with a '$' and is followed by 1 or more digits *)
 
-pawnMove = Square, [check | checkmate] ; 
-pawnCapture = file, capture, Square, [check | checkmate]; 
-pawnPromotion = file, "=", piece, [check | checkmate];
+PawnMoveOrCapture = (pawnMove | pawnCapture), [check | checkmate] ; (* This should cover all pawn moves with check/mate *)
+
+Square = file, rank ; (* e4 *)
+pawnMove = Square, [pawnPromote] ; (* e4[=Q|R|B|N] *)
+pawnCapture = file, capture, Square, [pawnPromote] ; (* exd5[=Q|R|B|N] *)
+pawnPromote = "=", piece ; (* =Q|R|B|N *)
+
+
+
 pieceMove = piece, [file | rank], Square, [check | checkmate] ; (* Need to test cases of Nge7 etc. *)
 pieceCapture = piece, capture, Square, [check | checkmate];
 
-Square = file, rank ;
 rank = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" ;
 file = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" ;
 piece = "K" | "Q" | "B" | "N" | "R" ;
