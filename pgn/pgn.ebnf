@@ -18,17 +18,22 @@ Result = "1-0" | "0-1" | "1/2-1/2" | "*" ;
 moveSymbol = "$", digit, {digit} ; (* Spec: 'NAG' is starts with a '$' and is followed by 1 or more digits *)
 
 PawnMoveOrCapture = (pawnMove | pawnCapture), [check | checkmate] ; (* This should cover all pawn moves with check/mate *)
+PieceMoveOrCapture = (pieceMove | pieceCapture | pieceMoveDiff | pieceMoveRare), [check | checkmate] ; (* Lengthy but expressive *)
 
-Square = file, rank ; (* e4 *)
 pawnMove = Square, [pawnPromote] ; (* e4[=Q|R|B|N] *)
-pawnCapture = file, capture, Square, [pawnPromote] ; (* exd5[=Q|R|B|N] *)
+pawnCapture = file, captureSquare, [pawnPromote] ; (* exd5[=Q|R|B|N] *)
 pawnPromote = "=", piece ; (* =Q|R|B|N *)
 
 
+pieceMove = piece, Square ; (* Nc3 *)
+pieceCapture = piece, captureSquare ; (* Qxf7 *)
+pieceMoveDiff = piece, [file | rank], [captureSquare | Square] ; (* Rah1 or Raxh1 or R4h2 or R1xh2 *)
+pieceMoveRare = pieceMove, [captureSquare | Square] ; (* Rare intances of things like Qa6xb7 or Qa6b7 *)
 
-pieceMove = piece, [file | rank], Square, [check | checkmate] ; (* Need to test cases of Nge7 etc. *)
-pieceCapture = piece, capture, Square, [check | checkmate];
+captureSquare = "x", Square ; (* <something>xe4 *)
 
+
+Square = file, rank ; (* e4 *)
 rank = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" ;
 file = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" ;
 piece = "K" | "Q" | "B" | "N" | "R" ;
