@@ -4,47 +4,55 @@
 (* Link for more information about EBNF: https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form *)
 (* ======================================================================== *)
 
-
+(* A PGN file is made up of 0 or more Games. Assuming an empty file is valid *)
 PGN = {Game} ;
 Game = {Tag}, "\n", {Move}, [Result], ["\n"] ;
+
 Tag = "[", {Character}, '"', {Character},'"', "]" ;
-
-Move = Number, Ply, [Ply] ; 
-Number = digit, ("." | "...") ; (* Need to test variations '(<varation here>{Variation comment} )3...b5 etc'*)
-Ply = (PawnMoveOrCapture | pieceMove | pieceCapture | Castles ), [moveSymbol] ;
-
 Result = "1-0" | "0-1" | "1/2-1/2" | "*" ;
 
-moveSymbol = "$", digit, {digit} ; (* Spec: 'NAG' is starts with a '$' and is followed by 1 or more digits *)
+(* Ex. 1. e4 e5 ; "e4" is a Ply *)
+Move = Number, Ply, [Ply] ; 
 
+(* TODO! Need to test variations '(<varation here>{Variation comment} )3...b5 etc'*)
+Number = digit, ("." | "...") ; 
+
+(* A 'ply' is a half move. Ex: 1. e4 e5 -> e4 one ply *)
+Ply = (PawnMoveOrCapture | PieceMoveOrCapture | Castles ), [moveSymbol] ;
+
+(* Encapsulates all piece moves/captures... hopefully *)
 PawnMoveOrCapture = (pawnMove | pawnCapture), [check | checkmate] ; (* This should cover all pawn moves with check/mate *)
 PieceMoveOrCapture = (pieceMove | pieceCapture | pieceMoveDiff | pieceMoveRare), [check | checkmate] ; (* Lengthy but expressive *)
 
+(* 'moveSymbol' is for denoting brilliant moves or blunders '!!' or '??' *)
+moveSymbol = "$", digit, {digit} ; (* Spec: 'NAG' starts with a '$' and is followed by 1 or more digits *)
+
+(* PAWN MOVES AND CAPTURES *)
 pawnMove = Square, [pawnPromote] ; (* e4[=Q|R|B|N] *)
 pawnCapture = file, captureSquare, [pawnPromote] ; (* exd5[=Q|R|B|N] *)
 pawnPromote = "=", piece ; (* =Q|R|B|N *)
 
-
+(* PIECE MOVES AND CAPTURES *)
 pieceMove = piece, Square ; (* Nc3 *)
 pieceCapture = piece, captureSquare ; (* Qxf7 *)
 pieceMoveDiff = piece, [file | rank], [captureSquare | Square] ; (* Rah1 or Raxh1 or R4h2 or R1xh2 *)
 pieceMoveRare = pieceMove, [captureSquare | Square] ; (* Rare intances of things like Qa6xb7 or Qa6b7 *)
 
-captureSquare = "x", Square ; (* <something>xe4 *)
+
+(* CASTLING *)
+Castles = castleKing | castleQueen ;
+castleKing = "O-O", [check | checkmate] ;
+castleQueen = "O-O-O", [check | checkmate] ;
 
 
 Square = file, rank ; (* e4 *)
+captureSquare = "x", Square ; (* <something>xe4 *)
 rank = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" ;
 file = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" ;
 piece = "K" | "Q" | "B" | "N" | "R" ;
 capture = "x" ;
 check = "+" ;
 checkmate = "#" ;
-
-
-Castles = castleKing | castleQueen ;
-castleKing = "O-O", [check | checkmate] ;
-castleQueen = "O-O-O", [check | checkmate] ;
 
 Character = letter | digit | symbol ;
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
