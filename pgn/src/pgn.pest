@@ -1,0 +1,64 @@
+//! A PEG (Parsing Expression Grammar) for the PGN file format.
+/// I based the grammar on this file on the specification found here: http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
+/// I first created an EBNF grammar which can be found in `../pgn.ebnf`
+/// ========================================================================
+
+/// A PGN file is made up of 0 or more Games. Assuming an empty file is valid
+PGN = (Game)* ;
+Game = { (Tag)* ~ "\n" ~ (Move)* ~ (Result)? ~ ("\n")* }
+
+Tag = { "[" ~ (Character)* ~ "]" }
+Result = {"1-0" | "0-1" | "1/2-1/2" | "*"}
+
+/// Ex. 1. e4 e5 ; "e4" is a Ply
+Move = {Number ~ Ply ~ (Ply)?}
+
+/// TODO! Need to test variations '(<varation here>{Variation comment} )3...b5 etc'
+Number = {(ASCII_DIGIT)+ ~ ("." | "..."){1}}
+
+/// A 'ply' is a half move. Ex: 1. e4 e5 -> e4 one ply
+Ply = {(PawnMoveOrCapture | PieceMoveOrCapture | Castles ) ~ (moveSymbol)?}
+
+/// Encapsulates all piece moves/captures... hopefully
+PawnMoveOrCapture = _{ (pawnMove | pawnCapture) ~ (check | checkmate)?} /// This should cover all pawn moves with check/mate
+PieceMoveOrCapture = _{ (pieceMove | pieceCapture | pieceMoveDiff | pieceMoveRare) ~ (check | checkmate)?} /// Lengthy but expressive
+
+/// 'moveSymbol' is for denoting brilliant moves or blunders '!!' or '??'
+moveSymbol = _{"$" ~ ASCII_DIGIT ~ (ASCII_DIGIT)+} /// Spec: 'NAG' starts with a '$' and is followed by 1 or more digits
+
+/// PAWN MOVES AND CAPTURES
+pawnMove = _{Square ~ (pawnPromote)?} /// e4[=Q|R|B|N]
+pawnCapture = _{file ~ captureSquare ~ (pawnPromote)?} /// exd5[=Q|R|B|N]
+pawnPromote = _{"=" ~ piece} /// "=Q|R|B|N"
+
+/// PIECE MOVES AND CAPTURES
+pieceMove = _{piece ~ Square } /// Nc3
+pieceCapture = _{piece ~ captureSquare} /// Qxf7
+pieceMoveDiff = _{piece ~ (file | rank)? ~ (captureSquare | Square)?} /// Rah1 or Raxh1 or R4h2 or R1xh2
+pieceMoveRare = _{pieceMove ~ (captureSquare | Square)?} /// Rare intances of things like Qa6xb7 or Qa6b7 
+
+
+/// CASTLING 
+Castles = _{ castleKing | castleQueen }
+castleKing = _{"O-O" ~ (check | checkmate)? } 
+castleQueen = _{"O-O-O" ~ (check | checkmate)? }
+
+
+Square = _{file ~ rank} /// "e4" 
+captureSquare = _{"x" ~ Square} /// "<something>xe4"
+rank = _{"1".."8"}
+file = _{"a".."h"}
+piece = _{"K" | "Q" | "B" | "N" | "R"}
+capture = _{"x"}
+check = _{"+"}
+checkmate = _{"#"}
+
+Character = _{ASCII_ALPHA | ASCII_DIGIT | symbol}
+
+
+symbol = _{ "{" | "}" | "(" | ")" | "<" | ">"
+       | "'" | '"' | "=" | "|" | "." | "," | ";" | "-" 
+       | "+" | "*" | "?" | "\n" | "_" | " " | "/" | "!" | ":" }
+
+
+(* ======================================================================== *)
