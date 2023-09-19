@@ -4,7 +4,7 @@
 /// ========================================================================
 
 /// A PGN file is made up of 0 or more Games. Assuming an empty file is valid
-PGN = (Game)* ;
+PGN = {(Game)*}
 Game = { (Tag)* ~ "\n" ~ (Move)* ~ (Result)? ~ ("\n")* }
 
 Tag = { "[" ~ (Character)* ~ "]" }
@@ -46,19 +46,19 @@ castleQueen = _{"O-O-O" ~ (check | checkmate)? }
 
 Square = _{file ~ rank} /// "e4" 
 captureSquare = _{"x" ~ Square} /// "<something>xe4"
-rank = _{"1".."8"}
-file = _{"a".."h"}
-piece = _{"K" | "Q" | "B" | "N" | "R"}
-capture = _{"x"}
-check = _{"+"}
-checkmate = _{"#"}
+rank = _{('1'..'8')}
+file = _{('a'..'h')}
+piece = _{("K" | "Q" | "B" | "N" | "R")}
+capture = _{("x")}
+check = _{("+")}
+checkmate = _{("#")}
 
 Character = _{ASCII_ALPHA | ASCII_DIGIT | symbol}
 
 
-symbol = _{ "{" | "}" | "(" | ")" | "<" | ">"
-       | "'" | '"' | "=" | "|" | "." | "," | ";" | "-" 
-       | "+" | "*" | "?" | "\n" | "_" | " " | "/" | "!" | ":" }
+symbol = _{ ("{" | "}" | "(" | ")" | "<" | ">"
+       | "'" | "\"" | "=" | "|" | "." | "," | ";" | "-" 
+       | "+" | "*" | "?" | "\n" | "_" | " " | "/" | "!" | ":") }
 
 
-(* ======================================================================== *)
+/// ========================================================================
