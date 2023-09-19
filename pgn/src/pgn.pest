@@ -7,7 +7,7 @@
 PGN = {(Game)*}
 Game = { (Tag)* ~ "\n" ~ (Move)* ~ (Result)? ~ ("\n")* }
 
-Tag = { "[" ~ (Character)* ~ "]" }
+Tag = { "[" ~ (LETTER* ~ " "){1} ~ (LETTER | NUMBER | PUNCTUATION)* ~ "]"  }
 Result = {"1-0" | "0-1" | "1/2-1/2" | "*"}
 
 /// Ex. 1. e4 e5 ; "e4" is a Ply
