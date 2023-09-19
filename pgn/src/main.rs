@@ -1,5 +1,14 @@
+extern crate pest;
+#[macro_use]
+extern crate pest_derive;
+
+use pest::Parser;
 use std::env;
 use std::fs;
+
+#[derive(Parser)]
+#[grammar = "pgn.pest"]
+struct PGN;
 
 fn main() -> std::io::Result<()> {
     // Get args and check for possibility of a file path existing in argv[1]
