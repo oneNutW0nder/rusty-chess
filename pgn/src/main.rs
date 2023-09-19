@@ -30,5 +30,15 @@ fn main() -> std::io::Result<()> {
 
     println!("{contents}");
 
+    // Begin testing pest stuff
+    let pairs = PGN::parse(Rule::Game, contents).unwrap_or_else(|e| panic!("{}", e));
+
+    for pair in pairs {
+        // A pair is a combination of the rule which matched and a span of input
+        println!("Rule:    {:?}", pair.as_rule());
+        println!("Span:    {:?}", pair.as_span());
+        println!("Text:    {}", pair.as_str());
+    }
+
     Ok(())
 }
