@@ -1,79 +1,80 @@
 //! A PEG (Parsing Expression Grammar) for the PGN file format.
-/// I based the grammar on this file on the specification found here: http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
-/// I first created an EBNF grammar which can be found in `../pgn.ebnf`
-/// ========================================================================
+// I based the grammar on this file on the specification found here: http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
+// I first created an EBNF grammar which can be found in `../pgn.ebnf` which
+// was based on the specification linked above and on my own observations of
+// what Chess.com, Lichess, and Hiarcs Chess Explorer do in certain scenarios.
+// ========================================================================
+// Tested here: https://pest.rs/?g=N4Ig5gTghgtjURALhAdQBIEkAqBRAygAoCCAwrgAQC8FA%2BsBQDohMsC%2BjAdqQBYIUDB1OgwAUxfKUyZaxADKF0xAHIBVALK4ASplIUAPq1rMDrAIQnDzAOSXWSO8wDcjkAHpXAflcA6VwFpmAEoKDk4AcVgAUyFBGgoxbCgwAGcQgD8KZVxUOUxsikz1AHsANyiUwootCoBXABsAF1CuLiTUgRpE5Krs3PzcIIAqFs52uITWAG0TTIBpKIBPKoA1KHramMzmAF0TMIXlzsneBBGwtY2YrtZGO5BZilFTiGGq5juP9lbOEvLK4RiP5RN5hYETBjKWowABGUQgVUI9WWmVESMWoK4UNh8MBFAkUhkABFMOEcABqKqiZh%2BFhWEA%2BRnBYAARjYoy4bi5%2BIo1gADsjrBQAJaVKAUPj1ABmFBgZSiPgouAAHkgKCzFVEACwUKIAVgo-gAfLqdcVODEBYsuOjhAABMSEKAAd1%2B8oA8hBSFA%2BY1ahAYoZCMKogBjKLAz3e33%2BwMUb0pRr1CoZLI5PLZTxhTnc3CcUM%2BlINKCNCoUdb1Ch8kPh2XylJuAsxgMpRmKnjFPlRKUNZE2l1u8pRn1%2BgPHehPUR8gfgwzT13R0cg1ns1GhnhhgDWpnXW-gpaCnhC2c4XLcFGwPFFFBSHYaABMKKH5QiK1WB3X-hRncLGjwnxuoabm4%2B5RDaNYRh6XojrGwgTlOEHAloCBxtWYaQeURLClKMpzoh8qmGh4aLrGqaiLuQE7oBm6gYeHKntyJCoMoFDqO6KwEPiyhEvGxCENgqhaAQXDzoOMQTBO%2BAAI61ChVKiYQEDFHKB6ePRZ6mlMVAAIr6Fo%2BgAEL6MoeycKJJFjjQE5SsKyZVE2S7SbJY6ogpSkqSCaknhpUTKveepabp%2BlGSZIkDopynFKWcEMMwVCPERMTedycVBYZxkfJwObnoQmC4OQrHsZxKg8aQfECUJ%2BAifh5SxFZDCJVUTlycl57KKGADM1XoRZ4n1VWEH2TBAbNWOrUUNpypSgA7N14bAlhOExQN6FUjZdmGNAnCbnRa7DVEo1xoddHjchPAshQxQIshyrnZd11ajwABM93VCyt1PXNGFRMhlkiCt80EXtzYHTJcmGMdXk-Bpv0xMKnCNFA%2BZlsUMp-vDHT1MKm4xNpUAAGzKjC02vXj%2BPE9D3Jlfg2AZuEXAJkmZZCP1BaJsmcwYzuUDs1E2mbFEnCjGzTOc5wYDjrFIDuv47qPOR1FUXuJaecLPNM-zUSC8tzAy3r8sUduhiG7RUNZZwh2xBJDDrVsFBbdu43MNqmUObGlv9cwyqPJbTsgAAPCkylROj4tGsqLsPJwDtWyz-2iNYLLWIy1gABzWMeXC27H1tPNYUDJz41g8BnoyNTn-XUiAcyuNprgGa4yiuFowRqyDseV17rdhIbOfLVX5Ld1wJsq3V8fMAAxEP5s1EWTR4swLL%2BAADK4y-%2BCyrgsm4T0bzvrhDPsXAgAANCA8N8rUjTICAUyoFepaqBAlbMDwjSNHyKRIFyzq-z4u4pFbM%2BGAbgYS1E4PeZMDZnRRBhG4YU8AwAVDcJwYoUBSglgQLQeoPhU5aigAATielqDq%2BMfBgGwrsLgd8H5RFIMUcBjQIDLGYJ9EApkaG-iiNgX8dkvgcIMvUKAQEn4vxAG-D%2BX8uQIOSBUf%2BG5AHANtkA5SbhagCjQfeBspRt61BSPCNwLIWQdRZHqZe01l6p3-iyAhpiCF6hhD4MxyozHFH-vjaa018bLygNNDqeoPE%2BAAFZdjAFQzgUxBHCM3PQxhzDWBsIEUIoCPCma3HYT8DUFB7w6mUFKfGFAnqKlDDqMABSOqKjyR1CgBkwAky1IqMA1T-IUD1IqWpL17zKhKRQMhWQoDVM6hQaaioYTdOqXrCgViKD63zAaAh7SYQvXagUlky9KmhhetpGEqyslaBhBdAyUoDQsiKbqQZfkdTGOKZcrIMIrkNJqQMrgBlukvVMYqbS94XqvIOeqPpWgiYXSgCckZNSiY6igBC9U0zAX3ImiC9UCzqhExJpNKAL0nrrJRVEWanBJrfMKVk5QfkXrIUxWc5QMJqn7NToUipWRQwGmQiySkxD2lSguvsv5T02nVGJiizlbK%2BlzDAJ9TgWgwCssKWCuYPAaUYsKdM5Q95qnKG1IU5FtLKRHLpR1bForclTSepSExlTjWCpeh1M5LsJUfQoB1BlLStCcodY8-UEo9Smr5aK5lxyJ4UHXiyEAbAgA#editor
 
 /// A PGN file is made up of 0 or more Games. Assuming an empty file is valid
-PGN = {(Game)*}
-Game = { Tags ~ "\n" ~ (Move)* ~ (Result)? ~ ("\n")* }
+// PGN = {(Game)*}
+Game  =  { (Tags) ~ NEWLINE ~ Moves ~ Result }
+Result = { "1-0" | "0-1" | "1/2-1/2" | "*" }
 
-/// Parses all tags from the beginning of a game
-Tags = {(Tag ~ NEWLINE)*}
 
-Tag = { "[" ~ Key ~ Value ~ "]" }
+/// Parse out consecutive tags
+Tags  = { (Tag ~ NEWLINE)* }
 
-Key = { Char* }
+/// Key value pairs. Ex: '[MyKey "MyValue"]'
+Tag   = { "[" ~ Key ~ Value ~ "]" }
+Key   = { Char* }
 Value = { "\"" ~ (Char)* ~ "\"" }
 
-WHITESPACE = _{ " " }
-
-Char = _{ (ASCII_ALPHANUMERIC | "!" | "'" | ":" | ";" | "/" | "?" | "." | "-" ) }
-
-
-
-
-
-Result = {"1-0" | "0-1" | "1/2-1/2" | "*"}
-
-/// Ex. 1. e4 e5 ; "e4" is a Ply
-Move = {Number ~ Ply ~ (Ply)?}
-
-/// TODO! Need to test variations '(<varation here>{Variation comment} )3...b5 etc'
-Number = {(ASCII_DIGIT)+ ~ ("." | "..."){1}}
+/// Parse out consecutive moves (most likely a game or variation)
+Moves  = { (Move)* }
+Move   = { Number ~ Ply ~ (Ply)* }
+Number = { ASCII_DIGIT+ ~ ("." | "..."){1} }
 
 /// A 'ply' is a half move. Ex: 1. e4 e5 -> e4 one ply
-Ply = {(PawnMoveOrCapture | PieceMoveOrCapture | Castles ) ~ (moveSymbol)?}
+Ply = @{ (PawnMoveOrCapture | PieceMoveOrCapture | Castles) ~ NEWLINE?}
 
-/// Encapsulates all piece moves/captures... hopefully
-PawnMoveOrCapture = _{ (pawnMove | pawnCapture) ~ (check | checkmate)?} /// This should cover all pawn moves with check/mate
-PieceMoveOrCapture = _{ (pieceMove | pieceCapture | pieceMoveDiff | pieceMoveRare) ~ (check | checkmate)?} /// Lengthy but expressive
-
-/// 'moveSymbol' is for denoting brilliant moves or blunders '!!' or '??'
-moveSymbol = _{"$" ~ ASCII_DIGIT ~ (ASCII_DIGIT)+} /// Spec: 'NAG' starts with a '$' and is followed by 1 or more digits
+/// Encapsulates all piece and pawn moves & captures...
+PawnMoveOrCapture  = _{ ((pawnMove | pawnCapture){1} ~ (check | checkmate)?) }
+PieceMoveOrCapture = _{ (pieceMoveRare | pieceMoveDiff | pieceMove | pieceCapture) ~ (check | checkmate)? }
 
 /// PAWN MOVES AND CAPTURES
-pawnMove = _{Square ~ (pawnPromote)?} /// e4[=Q|R|B|N]
-pawnCapture = _{file ~ captureSquare ~ (pawnPromote)?} /// exd5[=Q|R|B|N]
-pawnPromote = _{"=" ~ piece} /// "=Q|R|B|N"
+// e4[=Q|R|B|N]
+pawnMove    = _{ Square ~ (pawnPromote)? }
 
-/// PIECE MOVES AND CAPTURES
-pieceMove = _{piece ~ Square } /// Nc3
-pieceCapture = _{piece ~ captureSquare} /// Qxf7
-pieceMoveDiff = _{piece ~ (file | rank)? ~ (captureSquare | Square)?} /// Rah1 or Raxh1 or R4h2 or R1xh2
-pieceMoveRare = _{pieceMove ~ (captureSquare | Square)?} /// Rare intances of things like Qa6xb7 or Qa6b7 
+// exd5[=Q|R|B|N]
+pawnCapture = _{ file ~ captureSquare ~ (pawnPromote)? }
 
+// "=Q|R|B|N"
+pawnPromote = _{ "=" ~ piece }
 
-/// CASTLING 
-Castles = _{ castleKing | castleQueen }
-castleKing = _{"O-O" ~ (check | checkmate)? } 
-castleQueen = _{"O-O-O" ~ (check | checkmate)? }
+// A normal piece move
+pieceMove     = _{ piece ~ Square }
 
+// A normal piece capture
+pieceCapture  = _{ piece ~ captureSquare }
 
-Square = _{file ~ rank} /// "e4" 
-captureSquare = _{"x" ~ Square} /// "<something>xe4"
-rank = _{('1'..'8')}
-file = _{('a'..'h')}
-piece = _{("K" | "Q" | "B" | "N" | "R")}
-capture = _{("x")}
-check = _{("+")}
-checkmate = _{("#")}
+// Cases where you must differentiate the piece. Ex: Rah1 or Raxh1 or R4h2 or R1xh2
+pieceMoveDiff = _{ piece ~ (file | rank)? ~ (captureSquare | Square)? }
 
-Character = _{ASCII_ALPHA | ASCII_DIGIT | symbol}
+/// Rare intances of things like Qa6xb7 or Qa6b7
+pieceMoveRare = _{ pieceMove ~ (captureSquare | Square)? }
+
+// Castling operations
+Castles     = _{ castleKing | castleQueen }
+castleKing  = _{ "O-O" ~ (check | checkmate)? }
+castleQueen = _{ "O-O-O" ~ (check | checkmate)? }
 
 
-symbol = _{ ("{" | "}" | "(" | ")" | "<" | ">"
-       | "'" | "\"" | "=" | "|" | "." | "," | ";" | "-" 
-       | "+" | "*" | "?" | "\n" | "_" | " " | "/" | "!" | ":") }
+// Defines a capture 'xe4'
+captureSquare = _{ "x" ~ Square }
+
+// Helper values for creating moves
+Square        = _{ file ~ rank }
+rank          = _{ ('1'..'8') }
+file          = _{ ('a'..'h') }
+piece         = _{ ("K" | "Q" | "B" | "N" | "R") }
+capture       = _{ ("x") }
+check         = _{ ("+") }
+checkmate     = _{ ("#") }
+
+// Characters for tags and whatever else
+Char       = _{ (ASCII_ALPHANUMERIC | "_" | "!" | "'" | ":" | ";" | "/" | "?" | "." | "-") }
+WHITESPACE = _{ " " }
 
 
 /// ========================================================================
