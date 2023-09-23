@@ -5,9 +5,24 @@
 
 /// A PGN file is made up of 0 or more Games. Assuming an empty file is valid
 PGN = {(Game)*}
-Game = { (Tag)* ~ "\n" ~ (Move)* ~ (Result)? ~ ("\n")* }
+Game = { Tags ~ "\n" ~ (Move)* ~ (Result)? ~ ("\n")* }
 
-Tag = { "[" ~ (LETTER* ~ " "){1} ~ (LETTER | NUMBER | PUNCTUATION)* ~ "]"  }
+/// Parses all tags from the beginning of a game
+Tags = {(Tag ~ NEWLINE)*}
+
+Tag = { "[" ~ Key ~ Value ~ "]" }
+
+Key = { Char* }
+Value = { "\"" ~ (Char)* ~ "\"" }
+
+WHITESPACE = _{ " " }
+
+Char = _{ (ASCII_ALPHANUMERIC | "!" | "'" | ":" | ";" | "/" | "?" | "." | "-" ) }
+
+
+
+
+
 Result = {"1-0" | "0-1" | "1/2-1/2" | "*"}
 
 /// Ex. 1. e4 e5 ; "e4" is a Ply
