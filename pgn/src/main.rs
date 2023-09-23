@@ -31,6 +31,7 @@ fn main() -> std::io::Result<()> {
     println!("{contents}");
 
     // Begin testing pest stuff
+    // let pairs = PGN::parse(Rule::Game, contents).unwrap_or_else(|e| panic!("{}", e));
     let pairs = PGN::parse(Rule::Game, contents).unwrap_or_else(|e| panic!("{}", e));
 
     for pair in pairs {
